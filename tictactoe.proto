@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+service TicTacToe {
+  rpc LeaderAssignSymbols(SymbolsMessage) returns (SymbolsResult) {}
+  rpc CommandRequest(CommandMessage) returns (CommandResult) {}    // to communicate with client nodes through the server
+}
+
+// timestamp variable type depends on your implementation
+// we send timestamps with each request/reply
+
+// leader sends info to server
+message SymbolsMessage {
+  map<int32, int32> timestamps = 1;   // dict <node_id, clock_time>
+  map<int32, string> symbols = 2;    // dict <client_id, symbol> 
+}
+
+// server replies if the symbols are transmitted to clients successfully
+message SymbolResult {
+  map<int32, int32> timestamps = 1;
+  bool success = 2;
+}
+
+// leader must receive a message like that
+message CommandMessage {
+  map<int32, int32> timestamps = 1;
+  string command = 2;
+  string symbol = 3;    // which symbol to put...
+  repeated int32 position = 4;    // ...at which position
+}
+
+// leader replies
+message CommandResult {
+  map<int32, int32> timestamps = 1;
+  string reply = 2;    // text reply from the leader node to the clients
+  bool is_finished = 3;    // if the game is finihed (if there is a winner)
+}
