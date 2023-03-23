@@ -12,14 +12,14 @@ service TicTacToe {
 
 // client sends message that it is ready
 message StartGameRequestMessage {
-  string StartGame = 1;
-  int32 id = 2;
+  string StartGame;
+  int id;
 }
 
 // server informs clients about who
 // is the player and who is the leader
 message StartGameReplyResult {
-  boolean AssignmentResult = 1;
+  boolean AssignmentResult;
 }
 
 // server sends info to the leader
@@ -57,9 +57,6 @@ message CommandReplyResult {
   string symbol = 3;    // which symbol to put...
   repeated int32 position = 4;    // ...at which position
 }
-
-_____________________________________________________________________________ // remove this delimiter :)
-
 
 // you can elaborate on this method for client request to a server
 message CommandMessage {
