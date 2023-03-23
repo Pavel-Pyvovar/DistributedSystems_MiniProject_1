@@ -10,8 +10,7 @@ def run():
     value = int(input("Enter the value to calculate: "))
     with grpc.insecure_channel('localhost:50051') as channel:
 
-        client = DateTimeClient(channel)
-        print(values)
+        print(value)
 		
 
 if __name__ == '__main__':
