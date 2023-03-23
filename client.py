@@ -11,8 +11,7 @@ def run():
     with grpc.insecure_channel('localhost:50051') as channel:
 
         client = DateTimeClient(channel)
-
-        print(value)
+        print(values)
 		
 
 if __name__ == '__main__':
