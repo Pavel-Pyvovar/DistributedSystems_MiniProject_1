@@ -30,7 +30,7 @@ message CommandRequestMessage {
 }
 
 // server sends info to the leader
-message CommandResult {
+message CommandReplyResult {
   map<int32, int32> timestamps = 1;
   string command = 2;
   string symbol = 3;    // which symbol to put...
