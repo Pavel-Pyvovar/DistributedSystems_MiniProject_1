@@ -13,7 +13,7 @@ service TicTacToe {
 // client sends message that it is ready
 message StartGameRequestMessage {
   string StartGame = 1;
-  int id = 1;
+  int32 id = 1;
 }
 
 // server informs clients about who
