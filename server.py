@@ -14,6 +14,7 @@ class TicTacToeServicer(tictactoe_pb2_grpc.TicTacToeServicer):
         self.leader_id = None
         # Will be taken care of by the Berkely algorithm
         self.timestamps = []
+        self.leader_assigned = False
 
     def fetchCommand(self, request, context):
         pass
@@ -22,9 +23,12 @@ class TicTacToeServicer(tictactoe_pb2_grpc.TicTacToeServicer):
         pass
 
     def StartGame(self, request, context):
-
-        if request.id == 3:
-            pass
+        # Hard coded
+        if request.node_id == 3:
+            return tictactoe_pb2.StartGameReplyResult(IsLeader=True)
+            self.leader_assigned = True
+        else:
+            return tictactoe_pb2.StartGameReplyResult(IsLeader=False)
 
 class PlayerServicer(tictactoe_pb2_grpc.TicTacToeServicer):
     pass

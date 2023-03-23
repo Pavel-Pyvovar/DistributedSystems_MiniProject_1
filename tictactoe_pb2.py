@@ -13,47 +13,51 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0ftictactoe.proto\"\xe8\x01\n\x0eSymbolsMessage\x12\x33\n\ntimestamps\x18\x01 \x03(\x0b\x32\x1f.SymbolsMessage.TimestampsEntry\x12-\n\x07symbols\x18\x02 \x03(\x0b\x32\x1c.SymbolsMessage.SymbolsEntry\x12\x0f\n\x07node_id\x18\x03 \x01(\x05\x1a\x31\n\x0fTimestampsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\x05:\x02\x38\x01\x1a.\n\x0cSymbolsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x87\x01\n\rSymbolsResult\x12\x32\n\ntimestamps\x18\x01 \x03(\x0b\x32\x1e.SymbolsResult.TimestampsEntry\x12\x0f\n\x07success\x18\x02 \x01(\x08\x1a\x31\n\x0fTimestampsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\x05:\x02\x38\x01\"\xa3\x01\n\x1bLeaderCommandRequestMessage\x12@\n\ntimestamps\x18\x01 \x03(\x0b\x32,.LeaderCommandRequestMessage.TimestampsEntry\x12\x0f\n\x07node_id\x18\x02 \x01(\x05\x1a\x31\n\x0fTimestampsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\x05:\x02\x38\x01\"\xc3\x01\n\x1aLeaderCommandRequestResult\x12?\n\ntimestamps\x18\x01 \x03(\x0b\x32+.LeaderCommandRequestResult.TimestampsEntry\x12\x0f\n\x07\x63ommand\x18\x02 \x01(\t\x12\x0e\n\x06symbol\x18\x03 \x01(\t\x12\x10\n\x08position\x18\x04 \x03(\x05\x1a\x31\n\x0fTimestampsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\x05:\x02\x38\x01\"\xbc\x01\n\x0e\x43ommandMessage\x12\x33\n\ntimestamps\x18\x01 \x03(\x0b\x32\x1f.CommandMessage.TimestampsEntry\x12\x0f\n\x07\x63ommand\x18\x02 \x01(\t\x12\x0e\n\x06symbol\x18\x03 \x01(\t\x12\x10\n\x08position\x18\x04 \x03(\x05\x12\x0f\n\x07node_id\x18\x05 \x01(\x05\x1a\x31\n\x0fTimestampsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\x05:\x02\x38\x01\x32\x9a\x01\n\tTicTacToe\x12\x38\n\x13LeaderAssignSymbols\x12\x0f.SymbolsMessage\x1a\x0e.SymbolsResult\"\x00\x12S\n\x14LeaderCommandRequest\x12\x1c.LeaderCommandRequestMessage\x1a\x1b.LeaderCommandRequestResult\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0ftictactoe.proto\"8\n\x17StartGameRequestMessage\x12\x11\n\ttimestamp\x18\x01 \x01(\t\x12\n\n\x02id\x18\x02 \x01(\x05\"(\n\x14StartGameReplyResult\x12\x10\n\x08IsLeader\x18\x01 \x01(\x08\"\xb3\x01\n\x12\x43ommandReplyResult\x12\x37\n\ntimestamps\x18\x01 \x03(\x0b\x32#.CommandReplyResult.TimestampsEntry\x12\x0f\n\x07\x63ommand\x18\x02 \x01(\t\x12\x0e\n\x06symbol\x18\x03 \x01(\t\x12\x10\n\x08position\x18\x04 \x03(\x05\x1a\x31\n\x0fTimestampsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\x05:\x02\x38\x01\"\xe8\x01\n\x0eSymbolsMessage\x12\x33\n\ntimestamps\x18\x01 \x03(\x0b\x32\x1f.SymbolsMessage.TimestampsEntry\x12-\n\x07symbols\x18\x02 \x03(\x0b\x32\x1c.SymbolsMessage.SymbolsEntry\x12\x0f\n\x07node_id\x18\x03 \x01(\x05\x1a\x31\n\x0fTimestampsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\x05:\x02\x38\x01\x1a.\n\x0cSymbolsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x87\x01\n\rSymbolsResult\x12\x32\n\ntimestamps\x18\x01 \x03(\x0b\x32\x1e.SymbolsResult.TimestampsEntry\x12\x0f\n\x07success\x18\x02 \x01(\x08\x1a\x31\n\x0fTimestampsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\x05:\x02\x38\x01\"\x97\x01\n\x15\x43ommandRequestMessage\x12:\n\ntimestamps\x18\x01 \x03(\x0b\x32&.CommandRequestMessage.TimestampsEntry\x12\x0f\n\x07node_id\x18\x02 \x01(\x05\x1a\x31\n\x0fTimestampsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\x05:\x02\x38\x01\"\xbc\x01\n\x0e\x43ommandMessage\x12\x33\n\ntimestamps\x18\x01 \x03(\x0b\x32\x1f.CommandMessage.TimestampsEntry\x12\x0f\n\x07\x63ommand\x18\x02 \x01(\t\x12\x0e\n\x06symbol\x18\x03 \x01(\t\x12\x10\n\x08position\x18\x04 \x03(\x05\x12\x0f\n\x07node_id\x18\x05 \x01(\x05\x1a\x31\n\x0fTimestampsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\x05:\x02\x38\x01\x32\xcd\x01\n\tTicTacToe\x12\x38\n\x13LeaderAssignSymbols\x12\x0f.SymbolsMessage\x1a\x0e.SymbolsResult\"\x00\x12?\n\x0e\x43ommandRequest\x12\x16.CommandRequestMessage\x1a\x13.CommandReplyResult\"\x00\x12\x45\n\x10StartGameRequest\x12\x18.StartGameRequestMessage\x1a\x15.StartGameReplyResult\"\x00\x62\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'tictactoe_pb2', globals())
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
+  _COMMANDREPLYRESULT_TIMESTAMPSENTRY._options = None
+  _COMMANDREPLYRESULT_TIMESTAMPSENTRY._serialized_options = b'8\001'
   _SYMBOLSMESSAGE_TIMESTAMPSENTRY._options = None
   _SYMBOLSMESSAGE_TIMESTAMPSENTRY._serialized_options = b'8\001'
   _SYMBOLSMESSAGE_SYMBOLSENTRY._options = None
   _SYMBOLSMESSAGE_SYMBOLSENTRY._serialized_options = b'8\001'
   _SYMBOLSRESULT_TIMESTAMPSENTRY._options = None
   _SYMBOLSRESULT_TIMESTAMPSENTRY._serialized_options = b'8\001'
-  _LEADERCOMMANDREQUESTMESSAGE_TIMESTAMPSENTRY._options = None
-  _LEADERCOMMANDREQUESTMESSAGE_TIMESTAMPSENTRY._serialized_options = b'8\001'
-  _LEADERCOMMANDREQUESTRESULT_TIMESTAMPSENTRY._options = None
-  _LEADERCOMMANDREQUESTRESULT_TIMESTAMPSENTRY._serialized_options = b'8\001'
+  _COMMANDREQUESTMESSAGE_TIMESTAMPSENTRY._options = None
+  _COMMANDREQUESTMESSAGE_TIMESTAMPSENTRY._serialized_options = b'8\001'
   _COMMANDMESSAGE_TIMESTAMPSENTRY._options = None
   _COMMANDMESSAGE_TIMESTAMPSENTRY._serialized_options = b'8\001'
-  _SYMBOLSMESSAGE._serialized_start=20
-  _SYMBOLSMESSAGE._serialized_end=252
-  _SYMBOLSMESSAGE_TIMESTAMPSENTRY._serialized_start=155
-  _SYMBOLSMESSAGE_TIMESTAMPSENTRY._serialized_end=204
-  _SYMBOLSMESSAGE_SYMBOLSENTRY._serialized_start=206
-  _SYMBOLSMESSAGE_SYMBOLSENTRY._serialized_end=252
-  _SYMBOLSRESULT._serialized_start=255
-  _SYMBOLSRESULT._serialized_end=390
-  _SYMBOLSRESULT_TIMESTAMPSENTRY._serialized_start=155
-  _SYMBOLSRESULT_TIMESTAMPSENTRY._serialized_end=204
-  _LEADERCOMMANDREQUESTMESSAGE._serialized_start=393
-  _LEADERCOMMANDREQUESTMESSAGE._serialized_end=556
-  _LEADERCOMMANDREQUESTMESSAGE_TIMESTAMPSENTRY._serialized_start=155
-  _LEADERCOMMANDREQUESTMESSAGE_TIMESTAMPSENTRY._serialized_end=204
-  _LEADERCOMMANDREQUESTRESULT._serialized_start=559
-  _LEADERCOMMANDREQUESTRESULT._serialized_end=754
-  _LEADERCOMMANDREQUESTRESULT_TIMESTAMPSENTRY._serialized_start=155
-  _LEADERCOMMANDREQUESTRESULT_TIMESTAMPSENTRY._serialized_end=204
-  _COMMANDMESSAGE._serialized_start=757
-  _COMMANDMESSAGE._serialized_end=945
-  _COMMANDMESSAGE_TIMESTAMPSENTRY._serialized_start=155
-  _COMMANDMESSAGE_TIMESTAMPSENTRY._serialized_end=204
-  _TICTACTOE._serialized_start=948
-  _TICTACTOE._serialized_end=1102
+  _STARTGAMEREQUESTMESSAGE._serialized_start=19
+  _STARTGAMEREQUESTMESSAGE._serialized_end=75
+  _STARTGAMEREPLYRESULT._serialized_start=77
+  _STARTGAMEREPLYRESULT._serialized_end=117
+  _COMMANDREPLYRESULT._serialized_start=120
+  _COMMANDREPLYRESULT._serialized_end=299
+  _COMMANDREPLYRESULT_TIMESTAMPSENTRY._serialized_start=250
+  _COMMANDREPLYRESULT_TIMESTAMPSENTRY._serialized_end=299
+  _SYMBOLSMESSAGE._serialized_start=302
+  _SYMBOLSMESSAGE._serialized_end=534
+  _SYMBOLSMESSAGE_TIMESTAMPSENTRY._serialized_start=250
+  _SYMBOLSMESSAGE_TIMESTAMPSENTRY._serialized_end=299
+  _SYMBOLSMESSAGE_SYMBOLSENTRY._serialized_start=488
+  _SYMBOLSMESSAGE_SYMBOLSENTRY._serialized_end=534
+  _SYMBOLSRESULT._serialized_start=537
+  _SYMBOLSRESULT._serialized_end=672
+  _SYMBOLSRESULT_TIMESTAMPSENTRY._serialized_start=250
+  _SYMBOLSRESULT_TIMESTAMPSENTRY._serialized_end=299
+  _COMMANDREQUESTMESSAGE._serialized_start=675
+  _COMMANDREQUESTMESSAGE._serialized_end=826
+  _COMMANDREQUESTMESSAGE_TIMESTAMPSENTRY._serialized_start=250
+  _COMMANDREQUESTMESSAGE_TIMESTAMPSENTRY._serialized_end=299
+  _COMMANDMESSAGE._serialized_start=829
+  _COMMANDMESSAGE._serialized_end=1017
+  _COMMANDMESSAGE_TIMESTAMPSENTRY._serialized_start=250
+  _COMMANDMESSAGE_TIMESTAMPSENTRY._serialized_end=299
+  _TICTACTOE._serialized_start=1020
+  _TICTACTOE._serialized_end=1225
 # @@protoc_insertion_point(module_scope)
