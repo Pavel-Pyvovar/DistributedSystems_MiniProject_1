@@ -12,14 +12,14 @@ service TicTacToe {
 
 // client sends message that it is ready
 message StartGameRequestMessage {
-  string StartGame;
-  int id;
+  string StartGame = 1;
+  int id = 1;
 }
 
 // server informs clients about who
 // is the player and who is the leader
 message StartGameReplyResult {
-  boolean AssignmentResult;
+  boolean AssignmentResult = 0;
 }
 
 // server sends info to the leader
