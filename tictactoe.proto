@@ -2,16 +2,18 @@ syntax = "proto3";
 
 service TicTacToe {
   rpc LeaderAssignSymbols(SymbolsMessage) returns (SymbolsResult) {}
-  rpc CommandRequest(CommandMessage) returns (CommandResult) {}    // to communicate with client nodes through the server
+  rpc CommandRequest(CommandRequestMessage) returns (CommandReplyResult) {}    // to communicate with client nodes through the server
 }
 
 // timestamp variable type depends on your implementation
 // we send timestamps with each request/reply
+// server has to check node_id's from the request to determine if the request is from a leader/client node
 
 // leader sends info to server
 message SymbolsMessage {
   map<int32, int32> timestamps = 1;   // dict <node_id, clock_time>
   map<int32, string> symbols = 2;    // dict <client_id, symbol> 
+  int32 node_id = 3;
 }
 
 // server replies if the symbols are transmitted to clients successfully
@@ -20,17 +22,29 @@ message SymbolResult {
   bool success = 2;
 }
 
-// leader must receive a message like that
-message CommandMessage {
+// leader requests server to provide it with a command from a client node
+message CommandRequestMessage {
+  map<int32, int32> timestamps = 1;
+  int32 node_id = 2;
+  // do we need to specify smth else here?
+}
+
+// server sends info to the leader
+message CommandResult {
   map<int32, int32> timestamps = 1;
   string command = 2;
   string symbol = 3;    // which symbol to put...
   repeated int32 position = 4;    // ...at which position
 }
 
-// leader replies
-message CommandResult {
+_____________________________________________________________________________ // remove this delimiter :)
+
+
+// you can elaborate on this method for client request to a server
+message CommandMessage {
   map<int32, int32> timestamps = 1;
-  string reply = 2;    // text reply from the leader node to the clients
-  bool is_finished = 3;    // if the game is finihed (if there is a winner)
+  string command = 2;
+  string symbol = 3;    // which symbol to put...
+  repeated int32 position = 4;    // ...at which position
+  int32 node_id = 5;
 }
