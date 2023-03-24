@@ -3,15 +3,56 @@ class GameCoordinator:
 
     def __init__(self, leader_id, board, player_ids):
         self.leader_id = leader_id
-        self.board = board
+        # i think should be initialized here, not from outside
+        self.board = [['-'] * self.board_size for _ in range(self.board_size)]  # 'empty' positions are marked as '-'
         self.player_ids = player_ids
 
-    def check_winner(self):
+    # return a symbol of a winner
+    def check_winner(self) -> str:
         """Decide if there is a winner"""
         # This function probably should be called after every move
         # of any player to see if any row/column/diagonal is filled
         # with the same symbol
-        pass
+        results = []
+
+        # check diagonals
+        symbol = self.board[0][0]
+        for i in range(1, self.board_size):
+            if symbol != self.board[i][i]:
+                symbol = '-'
+                break
+        results.append(symbol)
+
+        symbol = self.board[self.board_size - 1][0]
+        for i in range(1, self.board_size):
+            if symbol != self.board[self.board_size - 1 - i][i]:
+                symbol = '-'
+                break
+        results.append(symbol)
+
+        # horisontal lines
+        for i in range(self.board_size):
+            symbol = self.board[i][0]
+            for j in range(1, self.board_size):
+                if symbol != self.board[i][j]:
+                    symbol = '-'
+                    break
+            results.append(symbol)
+
+        # vertical lines
+        for i in range(self.board_size):
+            symbol = self.board[0][i]
+            for j in range(1, self.board_size):
+                if symbol != self.board[j][i]:
+                    symbol = '-'
+                    break
+            results.append(symbol)
+
+        results = [x for x in results if x != '-']
+        if len(results) > 0:
+            return results[0]
+        else:
+            return '-'
 
     def reset_game(self):
         """If the winner was found, restart"""
@@ -30,6 +71,12 @@ class GameCoordinator:
         """
         pass
 
-    def list_board(self):
+    # returns board in a shape of matrix in a string format
+    def list_board(self) -> str:
         """Send a request to show the board."""
-        pass
+        output_board_string = ''
+        for i in range(self.board_size):
+            for j in range(self.board_size):
+                output_board_string += self.board[i][j] + '\t'
+            output_board_string += '\n'
+        return output_board_string

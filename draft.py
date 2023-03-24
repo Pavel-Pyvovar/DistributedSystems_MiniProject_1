@@ -50,6 +50,7 @@ class LeaderNode:
             # all master node text answers are stored in the 'reply' string variable
 
             if self.check_winner_combination() == '-':
+                pass
             # do next step of commands aka send reply to requests
 
             pass
