@@ -3,18 +3,31 @@ from concurrent import futures
 import time
 import tictactoe_pb2
 import tictactoe_pb2_grpc
-from DistributedSystems_MiniProject_1.leader_election import elect_leader
-from DistributedSystems_MiniProject_1.node_syncronization import syncronize_nodes
+from leader_election import elect_leader
+from node_syncronization import syncronize_nodes
 
 
 class TicTacToeServicer(tictactoe_pb2_grpc.TicTacToeServicer):
 
-    def __init__(self, leader_id):
+    def __init__(self):
         self.node_ids = []
-        self.leader_id = leader_id
-        # Will be taken care of by the Berkely algorithm
+        self.leader_id = None
+        # Will be taken care of by the Berkeley algorithm
         self.timestamps = []
-        self.leader_assigned = False
+        self.symbols = ['X', 'O']
+        self.responses = {}
+
+    def JoinGame(self, request, context):
+        initial_timestamp = request.timestamps
+
+        if len(self.node_ids) == 0:
+            self.node_ids.append(1)
+        else:
+            node_id = self.node_ids[-1]+1
+            self.node_ids.append(node_id)
+
+        return tictactoe_pb2.JoinGameResponse(node_id=node_id)
+
 
     def StartGame(self, request, context):
         """
@@ -22,12 +35,31 @@ class TicTacToeServicer(tictactoe_pb2_grpc.TicTacToeServicer):
          1. Synchronize nodes using their own internal clock with the Berkeley Algorithm.
          2. Elect a leader (game master)
         """
-        node_ids = request.node_ids
-        syncronize_nodes(node_ids)
-        self.leader_id = elect_leader(node_ids)
+        if len(self.node_ids) == 0:
+            self.node_ids.append(1)
+        else:
+            node_id = self.node_ids[-1]+1
+            self.node_ids.append(node_id)
+
+        # If we have not elected a leader yet
+        # if len(self.node_ids >= 3):
+        #     self.leader_id = elect_leader()
+        #
+        # syncronize_nodes(self.node_ids, self.leader_id)
+
+        is_leader = True if self.leader_id == node_id else False
+
+        symbol = ''
+        if node_id != self.leader_id and self.symbols:
+            symbol = self.symbols.pop()
+
+        self.responses[node_id] = tictactoe_pb2.StartGameResponse(
+            node_id=node_id, is_leader=is_leader, symbol=symbol)
+
+
         # Note that assigning symbols for more than two players requires a different approach
-        symbols = {n_id: s for n_id, s in zip(node_ids, ["X", "O"])}
-        return tictactoe_pb2.StartGameReplyResult(leader_id=self.leader_id, symbols=symbols)
+        return tictactoe_pb2.StartGameResponse(
+            node_id=node_id, is_leader=is_leader, symbol=symbol)
 
     def SetSymbol(self, request, context):
         """
@@ -54,15 +86,11 @@ class TicTacToeServicer(tictactoe_pb2_grpc.TicTacToeServicer):
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    # Bind servicer to the server
     # TODO: Agree upon node id format
-    node_ids = [1, 2, 3]
-    tictactoe_pb2_grpc.add_TicTacToeServicer_to_server(TicTacToeServicer(node_ids), server)
+    tictactoe_pb2_grpc.add_TicTacToeServicer_to_server(TicTacToeServicer(), server)
     server.add_insecure_port('[::]:20048')
     server.start()
     print("Server started listening on DESIGNATED port")
-    # Accept command request
-    # Store symbols
     try:
         while True:
             time.sleep(86400)

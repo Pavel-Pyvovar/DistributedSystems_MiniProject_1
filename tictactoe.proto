@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 service TicTacToe {
+  rpc JoinGame(JoinGameRequest) returns (JoinGameResponse) {}
   rpc StartGame(StartGameRequest) returns (StartGameResponse) {}
   rpc SetSymbol(SetSymbolRequest) returns (SetSymbolResponse) {}
   rpc CommandRequest(CommandRequestMessage) returns (CommandReplyResult) {}    // to communicate with client nodes through the server
@@ -11,17 +12,27 @@ service TicTacToe {
 // we send timestamps with each request/reply
 // server has to check node_id's from the request to determine if the request is from a leader/client node
 
+message JoinGameRequest {
+  string timestamp = 1;
+}
+
+message JoinGameResponse {
+  int32 node_id = 1;
+}
+
 // Client sends message that it is ready
 message StartGameRequest {
   string timestamp = 1;
-  int32 node_id = 2;
 }
 
 // Server informs clients about their role and
 // for players symbols assigned to them (X or O)
 message StartGameResponse {
-  bool leader_id = 1;
-  map<int32, string> symbols = 2; // dict <node_id, symbol>
+  int32 node_id = 1;
+//  bool leader_id = 2;
+  bool is_leader = 2;
+  string symbols = 3;
+//  map<int32, string> symbols = 3; // dict <node_id, symbol>
 }
 
 // Player sends info to server about its next turn
@@ -69,3 +80,5 @@ message CommandMessage {
   repeated int32 position = 4;    // ...at which position
   int32 node_id = 5;
 }
+
+// Broadcast a message to start the game

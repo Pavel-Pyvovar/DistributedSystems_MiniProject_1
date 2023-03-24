@@ -8,6 +8,9 @@ class GameCoordinator:
 
     def check_winner(self):
         """Decide if there is a winner"""
+        # This function probably should be called after every move
+        # of any player to see if any row/column/diagonal is filled
+        # with the same symbol
         pass
 
     def reset_game(self):

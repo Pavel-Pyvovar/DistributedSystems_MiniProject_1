@@ -13,51 +13,59 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0ftictactoe.proto\"8\n\x17StartGameRequestMessage\x12\x11\n\ttimestamp\x18\x01 \x01(\t\x12\n\n\x02id\x18\x02 \x01(\x05\"(\n\x14StartGameReplyResult\x12\x10\n\x08IsLeader\x18\x01 \x01(\x08\"\xb3\x01\n\x12\x43ommandReplyResult\x12\x37\n\ntimestamps\x18\x01 \x03(\x0b\x32#.CommandReplyResult.TimestampsEntry\x12\x0f\n\x07\x63ommand\x18\x02 \x01(\t\x12\x0e\n\x06symbol\x18\x03 \x01(\t\x12\x10\n\x08position\x18\x04 \x03(\x05\x1a\x31\n\x0fTimestampsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\x05:\x02\x38\x01\"\xe8\x01\n\x0eSymbolsMessage\x12\x33\n\ntimestamps\x18\x01 \x03(\x0b\x32\x1f.SymbolsMessage.TimestampsEntry\x12-\n\x07symbols\x18\x02 \x03(\x0b\x32\x1c.SymbolsMessage.SymbolsEntry\x12\x0f\n\x07node_id\x18\x03 \x01(\x05\x1a\x31\n\x0fTimestampsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\x05:\x02\x38\x01\x1a.\n\x0cSymbolsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x87\x01\n\rSymbolsResult\x12\x32\n\ntimestamps\x18\x01 \x03(\x0b\x32\x1e.SymbolsResult.TimestampsEntry\x12\x0f\n\x07success\x18\x02 \x01(\x08\x1a\x31\n\x0fTimestampsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\x05:\x02\x38\x01\"\x97\x01\n\x15\x43ommandRequestMessage\x12:\n\ntimestamps\x18\x01 \x03(\x0b\x32&.CommandRequestMessage.TimestampsEntry\x12\x0f\n\x07node_id\x18\x02 \x01(\x05\x1a\x31\n\x0fTimestampsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\x05:\x02\x38\x01\"\xbc\x01\n\x0e\x43ommandMessage\x12\x33\n\ntimestamps\x18\x01 \x03(\x0b\x32\x1f.CommandMessage.TimestampsEntry\x12\x0f\n\x07\x63ommand\x18\x02 \x01(\t\x12\x0e\n\x06symbol\x18\x03 \x01(\t\x12\x10\n\x08position\x18\x04 \x03(\x05\x12\x0f\n\x07node_id\x18\x05 \x01(\x05\x1a\x31\n\x0fTimestampsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\x05:\x02\x38\x01\x32\xcd\x01\n\tTicTacToe\x12\x38\n\x13LeaderAssignSymbols\x12\x0f.SymbolsMessage\x1a\x0e.SymbolsResult\"\x00\x12?\n\x0e\x43ommandRequest\x12\x16.CommandRequestMessage\x1a\x13.CommandReplyResult\"\x00\x12\x45\n\x10StartGameRequest\x12\x18.StartGameRequestMessage\x1a\x15.StartGameReplyResult\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0ftictactoe.proto\"$\n\x0fJoinGameRequest\x12\x11\n\ttimestamp\x18\x01 \x01(\t\"#\n\x10JoinGameResponse\x12\x0f\n\x07node_id\x18\x01 \x01(\x05\"%\n\x10StartGameRequest\x12\x11\n\ttimestamp\x18\x01 \x01(\t\"H\n\x11StartGameResponse\x12\x0f\n\x07node_id\x18\x01 \x01(\x05\x12\x11\n\tis_leader\x18\x02 \x01(\x08\x12\x0f\n\x07symbols\x18\x03 \x01(\t\"\xee\x01\n\x10SetSymbolRequest\x12\x35\n\ntimestamps\x18\x01 \x03(\x0b\x32!.SetSymbolRequest.TimestampsEntry\x12/\n\x07symbols\x18\x02 \x03(\x0b\x32\x1e.SetSymbolRequest.SymbolsEntry\x12\x0f\n\x07node_id\x18\x03 \x01(\x05\x1a\x31\n\x0fTimestampsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\x05:\x02\x38\x01\x1a.\n\x0cSymbolsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x8f\x01\n\x11SetSymbolResponse\x12\x36\n\ntimestamps\x18\x01 \x03(\x0b\x32\".SetSymbolResponse.TimestampsEntry\x12\x0f\n\x07success\x18\x02 \x01(\x08\x1a\x31\n\x0fTimestampsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\x05:\x02\x38\x01\"8\n\x12SetNodeTimeRequest\x12\x0f\n\x07node_id\x18\x01 \x01(\x05\x12\x11\n\ttimestamp\x18\x02 \x01(\t\"%\n\x13SetNodeTimeResponse\x12\x0e\n\x06result\x18\x01 \x01(\t\"\xb3\x01\n\x12\x43ommandReplyResult\x12\x37\n\ntimestamps\x18\x01 \x03(\x0b\x32#.CommandReplyResult.TimestampsEntry\x12\x0f\n\x07\x63ommand\x18\x02 \x01(\t\x12\x0e\n\x06symbol\x18\x03 \x01(\t\x12\x10\n\x08position\x18\x04 \x03(\x05\x1a\x31\n\x0fTimestampsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\x05:\x02\x38\x01\"\x97\x01\n\x15\x43ommandRequestMessage\x12:\n\ntimestamps\x18\x01 \x03(\x0b\x32&.CommandRequestMessage.TimestampsEntry\x12\x0f\n\x07node_id\x18\x02 \x01(\x05\x1a\x31\n\x0fTimestampsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\x05:\x02\x38\x01\"\xbc\x01\n\x0e\x43ommandMessage\x12\x33\n\ntimestamps\x18\x01 \x03(\x0b\x32\x1f.CommandMessage.TimestampsEntry\x12\x0f\n\x07\x63ommand\x18\x02 \x01(\t\x12\x0e\n\x06symbol\x18\x03 \x01(\t\x12\x10\n\x08position\x18\x04 \x03(\x05\x12\x0f\n\x07node_id\x18\x05 \x01(\x05\x1a\x31\n\x0fTimestampsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\x05:\x02\x38\x01\x32\xa7\x02\n\tTicTacToe\x12\x31\n\x08JoinGame\x12\x10.JoinGameRequest\x1a\x11.JoinGameResponse\"\x00\x12\x34\n\tStartGame\x12\x11.StartGameRequest\x1a\x12.StartGameResponse\"\x00\x12\x34\n\tSetSymbol\x12\x11.SetSymbolRequest\x1a\x12.SetSymbolResponse\"\x00\x12?\n\x0e\x43ommandRequest\x12\x16.CommandRequestMessage\x1a\x13.CommandReplyResult\"\x00\x12:\n\x0bSetNodeTime\x12\x13.SetNodeTimeRequest\x1a\x14.SetNodeTimeResponse\"\x00\x62\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'tictactoe_pb2', globals())
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
+  _SETSYMBOLREQUEST_TIMESTAMPSENTRY._options = None
+  _SETSYMBOLREQUEST_TIMESTAMPSENTRY._serialized_options = b'8\001'
+  _SETSYMBOLREQUEST_SYMBOLSENTRY._options = None
+  _SETSYMBOLREQUEST_SYMBOLSENTRY._serialized_options = b'8\001'
+  _SETSYMBOLRESPONSE_TIMESTAMPSENTRY._options = None
+  _SETSYMBOLRESPONSE_TIMESTAMPSENTRY._serialized_options = b'8\001'
   _COMMANDREPLYRESULT_TIMESTAMPSENTRY._options = None
   _COMMANDREPLYRESULT_TIMESTAMPSENTRY._serialized_options = b'8\001'
-  _SYMBOLSMESSAGE_TIMESTAMPSENTRY._options = None
-  _SYMBOLSMESSAGE_TIMESTAMPSENTRY._serialized_options = b'8\001'
-  _SYMBOLSMESSAGE_SYMBOLSENTRY._options = None
-  _SYMBOLSMESSAGE_SYMBOLSENTRY._serialized_options = b'8\001'
-  _SYMBOLSRESULT_TIMESTAMPSENTRY._options = None
-  _SYMBOLSRESULT_TIMESTAMPSENTRY._serialized_options = b'8\001'
   _COMMANDREQUESTMESSAGE_TIMESTAMPSENTRY._options = None
   _COMMANDREQUESTMESSAGE_TIMESTAMPSENTRY._serialized_options = b'8\001'
   _COMMANDMESSAGE_TIMESTAMPSENTRY._options = None
   _COMMANDMESSAGE_TIMESTAMPSENTRY._serialized_options = b'8\001'
-  _STARTGAMEREQUESTMESSAGE._serialized_start=19
-  _STARTGAMEREQUESTMESSAGE._serialized_end=75
-  _STARTGAMEREPLYRESULT._serialized_start=77
-  _STARTGAMEREPLYRESULT._serialized_end=117
-  _COMMANDREPLYRESULT._serialized_start=120
-  _COMMANDREPLYRESULT._serialized_end=299
-  _COMMANDREPLYRESULT_TIMESTAMPSENTRY._serialized_start=250
-  _COMMANDREPLYRESULT_TIMESTAMPSENTRY._serialized_end=299
-  _SYMBOLSMESSAGE._serialized_start=302
-  _SYMBOLSMESSAGE._serialized_end=534
-  _SYMBOLSMESSAGE_TIMESTAMPSENTRY._serialized_start=250
-  _SYMBOLSMESSAGE_TIMESTAMPSENTRY._serialized_end=299
-  _SYMBOLSMESSAGE_SYMBOLSENTRY._serialized_start=488
-  _SYMBOLSMESSAGE_SYMBOLSENTRY._serialized_end=534
-  _SYMBOLSRESULT._serialized_start=537
-  _SYMBOLSRESULT._serialized_end=672
-  _SYMBOLSRESULT_TIMESTAMPSENTRY._serialized_start=250
-  _SYMBOLSRESULT_TIMESTAMPSENTRY._serialized_end=299
-  _COMMANDREQUESTMESSAGE._serialized_start=675
-  _COMMANDREQUESTMESSAGE._serialized_end=826
-  _COMMANDREQUESTMESSAGE_TIMESTAMPSENTRY._serialized_start=250
-  _COMMANDREQUESTMESSAGE_TIMESTAMPSENTRY._serialized_end=299
-  _COMMANDMESSAGE._serialized_start=829
-  _COMMANDMESSAGE._serialized_end=1017
-  _COMMANDMESSAGE_TIMESTAMPSENTRY._serialized_start=250
-  _COMMANDMESSAGE_TIMESTAMPSENTRY._serialized_end=299
-  _TICTACTOE._serialized_start=1020
-  _TICTACTOE._serialized_end=1225
+  _JOINGAMEREQUEST._serialized_start=19
+  _JOINGAMEREQUEST._serialized_end=55
+  _JOINGAMERESPONSE._serialized_start=57
+  _JOINGAMERESPONSE._serialized_end=92
+  _STARTGAMEREQUEST._serialized_start=94
+  _STARTGAMEREQUEST._serialized_end=131
+  _STARTGAMERESPONSE._serialized_start=133
+  _STARTGAMERESPONSE._serialized_end=205
+  _SETSYMBOLREQUEST._serialized_start=208
+  _SETSYMBOLREQUEST._serialized_end=446
+  _SETSYMBOLREQUEST_TIMESTAMPSENTRY._serialized_start=349
+  _SETSYMBOLREQUEST_TIMESTAMPSENTRY._serialized_end=398
+  _SETSYMBOLREQUEST_SYMBOLSENTRY._serialized_start=400
+  _SETSYMBOLREQUEST_SYMBOLSENTRY._serialized_end=446
+  _SETSYMBOLRESPONSE._serialized_start=449
+  _SETSYMBOLRESPONSE._serialized_end=592
+  _SETSYMBOLRESPONSE_TIMESTAMPSENTRY._serialized_start=349
+  _SETSYMBOLRESPONSE_TIMESTAMPSENTRY._serialized_end=398
+  _SETNODETIMEREQUEST._serialized_start=594
+  _SETNODETIMEREQUEST._serialized_end=650
+  _SETNODETIMERESPONSE._serialized_start=652
+  _SETNODETIMERESPONSE._serialized_end=689
+  _COMMANDREPLYRESULT._serialized_start=692
+  _COMMANDREPLYRESULT._serialized_end=871
+  _COMMANDREPLYRESULT_TIMESTAMPSENTRY._serialized_start=349
+  _COMMANDREPLYRESULT_TIMESTAMPSENTRY._serialized_end=398
+  _COMMANDREQUESTMESSAGE._serialized_start=874
+  _COMMANDREQUESTMESSAGE._serialized_end=1025
+  _COMMANDREQUESTMESSAGE_TIMESTAMPSENTRY._serialized_start=349
+  _COMMANDREQUESTMESSAGE_TIMESTAMPSENTRY._serialized_end=398
+  _COMMANDMESSAGE._serialized_start=1028
+  _COMMANDMESSAGE._serialized_end=1216
+  _COMMANDMESSAGE_TIMESTAMPSENTRY._serialized_start=349
+  _COMMANDMESSAGE_TIMESTAMPSENTRY._serialized_end=398
+  _TICTACTOE._serialized_start=1219
+  _TICTACTOE._serialized_end=1514
 # @@protoc_insertion_point(module_scope)
