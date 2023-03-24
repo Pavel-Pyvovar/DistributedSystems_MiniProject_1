@@ -36,24 +36,23 @@ class TicTacToeServicer(tictactoe_pb2_grpc.TicTacToeServicer):
          1. Synchronize nodes using their own internal clock with the Berkeley Algorithm.
          2. Elect a leader (game master)
         """
+        # initial assignments
         success = False
+        is_leader = False
+        symbol = ''
 
         if len(self.node_ids) >= 3:
             # Elect a leader
             self.leader_id = max(self.node_ids)
+            is_leader = self.leader_id == request.node_id
 
             syncronize_nodes(self.node_ids, self.leader_id)
-
             success = True
 
-        is_leader = True if self.leader_id == request.node_id else False
-
-        symbol = ''
-        if not is_leader and self.symbols:
-            symbol = self.symbols.pop()
+            if not is_leader and self.symbols:
+                symbol = self.symbols.pop()
 
         # Note that assigning symbols for more than two players requires a different approach
-        print(success, is_leader, symbol)
         return tictactoe_pb2.StartGameResponse(
             success=success, is_leader=is_leader, symbol=symbol)
 

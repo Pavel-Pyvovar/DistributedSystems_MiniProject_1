@@ -21,7 +21,9 @@ def run():
         while not response.success:
             time.sleep(10)
             response = stub.StartGame(tictactoe_pb2.StartGameRequest(node_id=node_id, timestamp=datetime.now().isoformat()))
-        print(response.symbol)
+        print(response)
+
+
         # response = stub.StartGame(tictactoe_pb2.StartGameRequest(timestampt=datetime.now()))
         # request = None
 

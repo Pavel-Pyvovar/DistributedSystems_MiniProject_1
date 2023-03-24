@@ -12,4 +12,3 @@ class Player:
     def list_board(self):
         """Send a request to show the board."""
         pass
-
