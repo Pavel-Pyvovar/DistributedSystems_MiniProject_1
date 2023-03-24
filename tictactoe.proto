@@ -1,25 +1,49 @@
 syntax = "proto3";
 
 service TicTacToe {
-  rpc LeaderAssignSymbols(SymbolsMessage) returns (SymbolsResult) {}
+  rpc StartGame(StartGameRequest) returns (StartGameResponse) {}
+  rpc SetSymbol(SetSymbolRequest) returns (SetSymbolResponse) {}
   rpc CommandRequest(CommandRequestMessage) returns (CommandReplyResult) {}    // to communicate with client nodes through the server
-  rpc StartGameRequest(StartGameRequestMessage) returns (StartGameReplyResult) {}
+  rpc SetNodeTime(SetNodeTimeRequest) returns (SetNodeTimeResponse) {}
 }
 
 // timestamp variable type depends on your implementation
 // we send timestamps with each request/reply
 // server has to check node_id's from the request to determine if the request is from a leader/client node
 
-// client sends message that it is ready
-message StartGameRequestMessage {
+// Client sends message that it is ready
+message StartGameRequest {
   string timestamp = 1;
-  int32 id = 2;
+  int32 node_id = 2;
 }
 
-// server informs clients about who
-// is the player and who is the leader
-message StartGameReplyResult {
-  bool IsLeader = 1;
+// Server informs clients about their role and
+// for players symbols assigned to them (X or O)
+message StartGameResponse {
+  bool leader_id = 1;
+  map<int32, string> symbols = 2; // dict <node_id, symbol>
+}
+
+// Player sends info to server about its next turn
+message SetSymbolRequest {
+  map<int32, int32> timestamps = 1;   // dict <node_id, clock_time>
+  map<int32, string> symbols = 2;    // dict <client_id, symbol>
+  int32 node_id = 3;
+}
+
+// server replies if the symbols are transmitted to clients successfully
+message SetSymbolResponse {
+  map<int32, int32> timestamps = 1;
+  bool success = 2;
+}
+
+message SetNodeTimeRequest {
+  int32 node_id = 1;
+  string timestamp = 2;
+}
+
+message SetNodeTimeResponse {
+  string result = 1;
 }
 
 // server sends info to the leader
@@ -28,19 +52,6 @@ message CommandReplyResult {
   string command = 2;
   string symbol = 3;    // which symbol to put...
   repeated int32 position = 4;    // ...at which position
-}
-
-// leader sends info to server
-message SymbolsMessage {
-  map<int32, int32> timestamps = 1;   // dict <node_id, clock_time>
-  map<int32, string> symbols = 2;    // dict <client_id, symbol> 
-  int32 node_id = 3;
-}
-
-// server replies if the symbols are transmitted to clients successfully
-message SymbolsResult {
-  map<int32, int32> timestamps = 1;
-  bool success = 2;
 }
 
 // leader requests server to provide it with a command from a client node
