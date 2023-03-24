@@ -20,12 +20,12 @@ class TicTacToeServicer(tictactoe_pb2_grpc.TicTacToeServicer):
     def JoinGame(self, request, context):
         initial_timestamp = request.timestamp
 
-        node_id = None
         if len(self.node_ids) == 0:
-            self.node_ids.append(1)
+            node_id = 1
         else:
             node_id = self.node_ids[-1]+1
-            self.node_ids.append(node_id)
+
+        self.node_ids.append(node_id)
 
         return tictactoe_pb2.JoinGameResponse(node_id=node_id)
 
@@ -36,31 +36,26 @@ class TicTacToeServicer(tictactoe_pb2_grpc.TicTacToeServicer):
          1. Synchronize nodes using their own internal clock with the Berkeley Algorithm.
          2. Elect a leader (game master)
         """
-        if len(self.node_ids) == 0:
-            self.node_ids.append(1)
-        else:
-            node_id = self.node_ids[-1]+1
-            self.node_ids.append(node_id)
+        success = False
 
-        # If we have not elected a leader yet
-        # if len(self.node_ids >= 3):
-        #     self.leader_id = elect_leader()
-        #
-        # syncronize_nodes(self.node_ids, self.leader_id)
+        if len(self.node_ids) >= 3:
+            # Elect a leader
+            self.leader_id = max(self.node_ids)
 
-        is_leader = True if self.leader_id == node_id else False
+            syncronize_nodes(self.node_ids, self.leader_id)
+
+            success = True
+
+        is_leader = True if self.leader_id == request.node_id else False
 
         symbol = ''
-        if node_id != self.leader_id and self.symbols:
+        if not is_leader and self.symbols:
             symbol = self.symbols.pop()
 
-        self.responses[node_id] = tictactoe_pb2.StartGameResponse(
-            node_id=node_id, is_leader=is_leader, symbol=symbol)
-
-
         # Note that assigning symbols for more than two players requires a different approach
+        print(success, is_leader, symbol)
         return tictactoe_pb2.StartGameResponse(
-            node_id=node_id, is_leader=is_leader, symbol=symbol)
+            success=success, is_leader=is_leader, symbol=symbol)
 
     def SetSymbol(self, request, context):
         """

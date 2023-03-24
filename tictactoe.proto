@@ -23,16 +23,15 @@ message JoinGameResponse {
 // Client sends message that it is ready
 message StartGameRequest {
   string timestamp = 1;
+  int32 node_id = 2;
 }
 
 // Server informs clients about their role and
 // for players symbols assigned to them (X or O)
 message StartGameResponse {
-  int32 node_id = 1;
-//  bool leader_id = 2;
+  bool success = 1;
   bool is_leader = 2;
-  string symbols = 3;
-//  map<int32, string> symbols = 3; // dict <node_id, symbol>
+  string symbol = 3;
 }
 
 // Player sends info to server about its next turn
