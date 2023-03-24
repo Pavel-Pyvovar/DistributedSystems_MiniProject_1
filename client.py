@@ -3,14 +3,13 @@ from datetime import datetime
 from datetime import timedelta
 import sys
 import time
-import threading
 
 import tictactoe_pb2_grpc, tictactoe_pb2
 from leader import GameCoordinator
 from player import Player
 
 def run():
-    with grpc.insecure_channel('localhost:50051') as channel:
+    with grpc.insecure_channel('localhost:20048') as channel:
 
         stub = tictactoe_pb2_grpc.TicTacToeStub(channel)
 
@@ -27,6 +26,7 @@ def run():
         #     leader = GameCoordinator(node_id)
         # else:
         #     player = Player(node_id, symbol)
+
 
 if __name__ == '__main__':
     run()

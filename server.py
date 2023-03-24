@@ -18,8 +18,9 @@ class TicTacToeServicer(tictactoe_pb2_grpc.TicTacToeServicer):
         self.responses = {}
 
     def JoinGame(self, request, context):
-        initial_timestamp = request.timestamps
+        initial_timestamp = request.timestamp
 
+        node_id = None
         if len(self.node_ids) == 0:
             self.node_ids.append(1)
         else:
@@ -86,7 +87,6 @@ class TicTacToeServicer(tictactoe_pb2_grpc.TicTacToeServicer):
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    # TODO: Agree upon node id format
     tictactoe_pb2_grpc.add_TicTacToeServicer_to_server(TicTacToeServicer(), server)
     server.add_insecure_port('[::]:20048')
     server.start()
