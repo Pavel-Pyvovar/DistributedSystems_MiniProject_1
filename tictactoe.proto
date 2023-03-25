@@ -3,6 +3,8 @@ syntax = "proto3";
 service TicTacToe {
   rpc JoinGame(JoinGameRequest) returns (JoinGameResponse) {}
   rpc StartGame(StartGameRequest) returns (StartGameResponse) {}
+  rpc AssignSymbol(AssignSymbolRequest) returns (AssignSymbolResponse) {}
+  rpc FetchSymbols(FetchSymbolsRequest) returns (FetchSymbolsResponse) {}
   rpc SetSymbol(SetSymbolRequest) returns (SetSymbolResponse) {}
   rpc CommandRequest(CommandRequestMessage) returns (CommandReplyResult) {}    // to communicate with client nodes through the server
   rpc SetNodeTime(SetNodeTimeRequest) returns (SetNodeTimeResponse) {}
@@ -31,7 +33,6 @@ message StartGameRequest {
 message StartGameResponse {
   bool success = 1;
   bool is_leader = 2;
-  string symbol = 3;
 }
 
 // Player sends info to server about its next turn
@@ -40,6 +41,23 @@ message SetSymbolRequest {
   map<int32, string> symbols = 2;    // dict <client_id, symbol>
   int32 node_id = 3;
 }
+
+message AssignSymbolRequest {
+  int32 node_id = 1;
+}
+
+message AssignSymbolResponse {
+  string symbol = 1;
+}
+
+message FetchSymbolsRequest {
+}
+
+message FetchSymbolsResponse {
+  bool success = 1;
+  map<int32, string> players = 2;
+}
+
 
 // server replies if the symbols are transmitted to clients successfully
 message SetSymbolResponse {

@@ -16,6 +16,7 @@ class TicTacToeServicer(tictactoe_pb2_grpc.TicTacToeServicer):
         self.timestamps = []
         self.symbols = ['X', 'O']
         self.responses = {}
+        self.players = {}
 
     def JoinGame(self, request, context):
         initial_timestamp = request.timestamp
@@ -39,7 +40,6 @@ class TicTacToeServicer(tictactoe_pb2_grpc.TicTacToeServicer):
         # initial assignments
         success = False
         is_leader = False
-        symbol = ''
 
         if len(self.node_ids) >= 3:
             # Elect a leader
@@ -49,12 +49,20 @@ class TicTacToeServicer(tictactoe_pb2_grpc.TicTacToeServicer):
             syncronize_nodes(self.node_ids, self.leader_id)
             success = True
 
-            if not is_leader and self.symbols:
-                symbol = self.symbols.pop()
-
         # Note that assigning symbols for more than two players requires a different approach
         return tictactoe_pb2.StartGameResponse(
-            success=success, is_leader=is_leader, symbol=symbol)
+            success=success, is_leader=is_leader)
+
+    def AssignSymbol(self, request, context):
+        symbol = self.symbols.pop()
+        self.players[request.node_id] = symbol
+        return tictactoe_pb2.AssignSymbolResponse(symbol=symbol)
+
+    def FetchSymbols(self, request, context):
+        success = False
+        if not self.symbols:
+            success = True
+        return tictactoe_pb2.FetchSymbolsResponse(success=success, players=self.players)
 
     def SetSymbol(self, request, context):
         """

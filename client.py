@@ -8,6 +8,19 @@ import tictactoe_pb2_grpc, tictactoe_pb2
 from leader import GameCoordinator
 from player import Player
 
+def coordinator_moves(stub, node_id):
+    response = stub.FetchSymbols(tictactoe_pb2.FetchSymbolsRequest())
+    while not response.success:
+        response = stub.FetchSymbols(tictactoe_pb2.FetchSymbolsRequest())
+
+    node = GameCoordinator(leader_id=node_id, player_ids_symbols=response.players)
+    pass
+
+def player_moves(stub, node_id):
+    response = stub.AssignSymbol(tictactoe_pb2.AssignSymbolRequest(node_id=node_id))
+    print(response)
+    pass
+
 def run():
     with grpc.insecure_channel('localhost:20048') as channel:
 
@@ -22,6 +35,13 @@ def run():
             time.sleep(10)
             response = stub.StartGame(tictactoe_pb2.StartGameRequest(node_id=node_id, timestamp=datetime.now().isoformat()))
         print(response)
+
+        if response.is_leader:
+            coordinator_moves(stub, node_id)
+        else:
+            player_moves(stub, node_id)
+
+
 
 
         # response = stub.StartGame(tictactoe_pb2.StartGameRequest(timestampt=datetime.now()))

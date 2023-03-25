@@ -1,11 +1,12 @@
 class GameCoordinator:
     """Leader that is responsible for managing the tictactoe game"""
 
-    def __init__(self, leader_id, board, player_ids):
-        self.leader_id = leader_id
+    def __init__(self, leader_id, player_ids_symbols: dict, board_size=3):
+        self.leader_id = leader_id  # check if we need it
         # i think should be initialized here, not from outside
+        self.board_size = board_size
         self.board = [['-'] * self.board_size for _ in range(self.board_size)]  # 'empty' positions are marked as '-'
-        self.player_ids = player_ids
+        self.player_ids_symbols = player_ids_symbols
 
     # return a symbol of a winner
     def check_winner(self) -> str:
