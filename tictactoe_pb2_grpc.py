@@ -34,10 +34,20 @@ class TicTacToeStub(object):
                 request_serializer=tictactoe__pb2.FetchSymbolsRequest.SerializeToString,
                 response_deserializer=tictactoe__pb2.FetchSymbolsResponse.FromString,
                 )
-        self.SetSymbol = channel.unary_unary(
-                '/TicTacToe/SetSymbol',
-                request_serializer=tictactoe__pb2.SetSymbolRequest.SerializeToString,
-                response_deserializer=tictactoe__pb2.SetSymbolResponse.FromString,
+        self.SetSymbolPlayer = channel.unary_unary(
+                '/TicTacToe/SetSymbolPlayer',
+                request_serializer=tictactoe__pb2.SetSymbolPlayerRequest.SerializeToString,
+                response_deserializer=tictactoe__pb2.SetSymbolPlayerResponse.FromString,
+                )
+        self.SetSymbolCoordinator = channel.unary_unary(
+                '/TicTacToe/SetSymbolCoordinator',
+                request_serializer=tictactoe__pb2.SetSymbolCoordinatorRequest.SerializeToString,
+                response_deserializer=tictactoe__pb2.SetSymbolCoordinatorResponse.FromString,
+                )
+        self.SetSymbolCoordinatorResult = channel.unary_unary(
+                '/TicTacToe/SetSymbolCoordinatorResult',
+                request_serializer=tictactoe__pb2.SetSymbolCoordinatorResultRequest.SerializeToString,
+                response_deserializer=tictactoe__pb2.SetSymbolCoordinatorResultResponse.FromString,
                 )
         self.CommandRequest = channel.unary_unary(
                 '/TicTacToe/CommandRequest',
@@ -78,7 +88,19 @@ class TicTacToeServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def SetSymbol(self, request, context):
+    def SetSymbolPlayer(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def SetSymbolCoordinator(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def SetSymbolCoordinatorResult(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -119,10 +141,20 @@ def add_TicTacToeServicer_to_server(servicer, server):
                     request_deserializer=tictactoe__pb2.FetchSymbolsRequest.FromString,
                     response_serializer=tictactoe__pb2.FetchSymbolsResponse.SerializeToString,
             ),
-            'SetSymbol': grpc.unary_unary_rpc_method_handler(
-                    servicer.SetSymbol,
-                    request_deserializer=tictactoe__pb2.SetSymbolRequest.FromString,
-                    response_serializer=tictactoe__pb2.SetSymbolResponse.SerializeToString,
+            'SetSymbolPlayer': grpc.unary_unary_rpc_method_handler(
+                    servicer.SetSymbolPlayer,
+                    request_deserializer=tictactoe__pb2.SetSymbolPlayerRequest.FromString,
+                    response_serializer=tictactoe__pb2.SetSymbolPlayerResponse.SerializeToString,
+            ),
+            'SetSymbolCoordinator': grpc.unary_unary_rpc_method_handler(
+                    servicer.SetSymbolCoordinator,
+                    request_deserializer=tictactoe__pb2.SetSymbolCoordinatorRequest.FromString,
+                    response_serializer=tictactoe__pb2.SetSymbolCoordinatorResponse.SerializeToString,
+            ),
+            'SetSymbolCoordinatorResult': grpc.unary_unary_rpc_method_handler(
+                    servicer.SetSymbolCoordinatorResult,
+                    request_deserializer=tictactoe__pb2.SetSymbolCoordinatorResultRequest.FromString,
+                    response_serializer=tictactoe__pb2.SetSymbolCoordinatorResultResponse.SerializeToString,
             ),
             'CommandRequest': grpc.unary_unary_rpc_method_handler(
                     servicer.CommandRequest,
@@ -213,7 +245,7 @@ class TicTacToe(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def SetSymbol(request,
+    def SetSymbolPlayer(request,
             target,
             options=(),
             channel_credentials=None,
@@ -223,9 +255,43 @@ class TicTacToe(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/TicTacToe/SetSymbol',
-            tictactoe__pb2.SetSymbolRequest.SerializeToString,
-            tictactoe__pb2.SetSymbolResponse.FromString,
+        return grpc.experimental.unary_unary(request, target, '/TicTacToe/SetSymbolPlayer',
+            tictactoe__pb2.SetSymbolPlayerRequest.SerializeToString,
+            tictactoe__pb2.SetSymbolPlayerResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def SetSymbolCoordinator(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/TicTacToe/SetSymbolCoordinator',
+            tictactoe__pb2.SetSymbolCoordinatorRequest.SerializeToString,
+            tictactoe__pb2.SetSymbolCoordinatorResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def SetSymbolCoordinatorResult(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/TicTacToe/SetSymbolCoordinatorResult',
+            tictactoe__pb2.SetSymbolCoordinatorResultRequest.SerializeToString,
+            tictactoe__pb2.SetSymbolCoordinatorResultResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

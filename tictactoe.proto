@@ -5,7 +5,9 @@ service TicTacToe {
   rpc StartGame(StartGameRequest) returns (StartGameResponse) {}
   rpc AssignSymbol(AssignSymbolRequest) returns (AssignSymbolResponse) {}
   rpc FetchSymbols(FetchSymbolsRequest) returns (FetchSymbolsResponse) {}
-  rpc SetSymbol(SetSymbolRequest) returns (SetSymbolResponse) {}
+  rpc SetSymbolPlayer(SetSymbolPlayerRequest) returns (SetSymbolPlayerResponse) {}
+  rpc SetSymbolCoordinator(SetSymbolCoordinatorRequest) returns (SetSymbolCoordinatorResponse) {}
+  rpc SetSymbolCoordinatorResult(SetSymbolCoordinatorResultRequest) returns (SetSymbolCoordinatorResultResponse) {}
   rpc CommandRequest(CommandRequestMessage) returns (CommandReplyResult) {}    // to communicate with client nodes through the server
   rpc SetNodeTime(SetNodeTimeRequest) returns (SetNodeTimeResponse) {}
 }
@@ -35,13 +37,6 @@ message StartGameResponse {
   bool is_leader = 2;
 }
 
-// Player sends info to server about its next turn
-message SetSymbolRequest {
-  map<int32, int32> timestamps = 1;   // dict <node_id, clock_time>
-  map<int32, string> symbols = 2;    // dict <client_id, symbol>
-  int32 node_id = 3;
-}
-
 message AssignSymbolRequest {
   int32 node_id = 1;
 }
@@ -58,11 +53,35 @@ message FetchSymbolsResponse {
   map<int32, string> players = 2;
 }
 
+// Player sends info to server about its next turn
+message SetSymbolPlayerRequest {
+  int32 node_id = 1;
+  string symbol = 2;
+  repeated int32 position = 3;
+}
 
 // server replies if the symbols are transmitted to clients successfully
-message SetSymbolResponse {
-  map<int32, int32> timestamps = 1;
-  bool success = 2;
+message SetSymbolPlayerResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message SetSymbolCoordinatorRequest {
+}
+
+message SetSymbolCoordinatorResponse {
+  int32 node_id = 1;
+  string symbol = 2;
+  repeated int32 position = 3;
+}
+
+message SetSymbolCoordinatorResultRequest {
+  bool success = 1;
+  string message = 2;
+}
+
+message SetSymbolCoordinatorResultResponse {
+  bool success = 1;
 }
 
 message SetNodeTimeRequest {

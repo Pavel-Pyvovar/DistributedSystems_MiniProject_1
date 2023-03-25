@@ -1,3 +1,6 @@
+import tictactoe_pb2
+
+
 class GameCoordinator:
     """Leader that is responsible for managing the tictactoe game"""
 
@@ -54,6 +57,22 @@ class GameCoordinator:
             return results[0]
         else:
             return '-'
+
+    def monitor_game(self, stub):
+        while True:
+            response = stub.SetSymbolCoordinator(tictactoe_pb2.SetSymbolCoordinatorRequest())
+            success = self.add_symbol(response.node_id, response.symbol, response.position)
+            response = stub.SetSymbolCoordinatorResult(tictactoe_pb2.SetSymbolCoordinatorResultRequest(success=True, message="Board is modified."))
+            if response.success:
+                print("Player is successfuly notified")
+            else:
+                print("Player is not notified")
+
+
+
+    def add_symbol(self, node_id, symbol, position):
+        print(f"symbol {symbol} is added from player {node_id}")
+        pass
 
     def reset_game(self):
         """If the winner was found, restart"""

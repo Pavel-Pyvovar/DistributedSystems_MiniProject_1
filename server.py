@@ -1,3 +1,4 @@
+from queue import Queue
 import grpc
 from concurrent import futures
 import time
@@ -17,6 +18,10 @@ class TicTacToeServicer(tictactoe_pb2_grpc.TicTacToeServicer):
         self.symbols = ['X', 'O']
         self.responses = {}
         self.players = {}
+        self.is_busy = False
+        self.player_moves = []
+        self.coordinator_done = False
+        self.coordinator_reply = []
 
     def JoinGame(self, request, context):
         initial_timestamp = request.timestamp
@@ -64,12 +69,46 @@ class TicTacToeServicer(tictactoe_pb2_grpc.TicTacToeServicer):
             success = True
         return tictactoe_pb2.FetchSymbolsResponse(success=success, players=self.players)
 
-    def SetSymbol(self, request, context):
+    def SetSymbolPlayer(self, request, context):
         """
         This command is used by a player during its turn to fill
          the board with its assigned symbol.
         """
-        pass
+        print(f"New request from {request.node_id}")
+        if not self.is_busy:
+            print(f"New request from {request.node_id} accepted.")
+            self.is_busy = True
+            self.coordinator_done = False
+            self.player_moves.append(request)
+
+            while not self.coordinator_done:
+                time.sleep(5)
+
+            print(f"Sending info from the coord to the player...")
+            self.is_busy = False
+            return tictactoe_pb2.SetSymbolPlayerResponse(success=self.coordinator_reply[0], message=self.coordinator_reply[1])
+        else:
+            return tictactoe_pb2.SetSymbolPlayerResponse(success=False, message="Server is busy. Try later.")
+
+    def SetSymbolCoordinator(self, request, context):
+        """
+        This command is used by a player during its turn to fill
+         the board with its assigned symbol.
+        """
+        while not self.is_busy:
+            time.sleep(5)
+        while not self.player_moves:
+            time.sleep(1)
+        print(f"Move request sent to a coordinator")
+        player_request = self.player_moves.pop()
+        return tictactoe_pb2.SetSymbolCoordinatorResponse(node_id=player_request.node_id, symbol=player_request.symbol, position=player_request.position)
+
+    def SetSymbolCoordinatorResult(self, request, context):
+        print(f"Coordinator replied")
+        self.coordinator_reply.append(request.success)
+        self.coordinator_reply.append(request.message)
+        self.coordinator_done = True
+        return tictactoe_pb2.SetSymbolCoordinatorResultResponse(success=True)
 
     def ListBoard(self, request, context):
         """
