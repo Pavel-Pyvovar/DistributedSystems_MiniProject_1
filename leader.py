@@ -1,6 +1,8 @@
 from queue import Queue
+from multiprocessing import Process
 
 import tictactoe_pb2
+import threading
 
 
 class GameCoordinator:
@@ -81,6 +83,15 @@ class GameCoordinator:
             else:
                 print("Player is not notified about the result.")
 
+    def coordinator_console(self):
+        while True:
+            command = input("Input a command (if new text appears in the console, you still is able to run a command): \n")
+            output_info = self.commands[command](self.leader_id, None)[1]
+            if command == 'List-board':
+                output_info = print_board(output_info)
+
+            print(output_info)
+
     def set_symbol(self, node_id, position):
         # Node id when passed in args through GRPC has to be converted to a string
             
@@ -134,3 +145,10 @@ class GameCoordinator:
                 output_board_string += self.board[i][j] + '\t'
             output_board_string += '\n'
         return True, output_board_string
+
+
+def print_board(data):
+    rows = data.split('\n')[:3]  # Split rows by newline
+    for row in rows:
+        cells = row.split('\t')[:4] # Split cells by tab
+        print(f"\n{cells[0]}\t{cells[1]}\t{cells[2]}")

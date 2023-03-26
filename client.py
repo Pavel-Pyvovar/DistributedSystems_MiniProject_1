@@ -1,4 +1,5 @@
 import grpc
+import threading
 from datetime import datetime
 import time
 
@@ -14,7 +15,16 @@ def coordinator_moves(stub, node_id):
 
     print(f"Game is started! You are a COORDINATOR. PLayers' symbols: {response.players}")
     leader = GameCoordinator(leader_id=node_id, player_ids_symbols=response.players)
-    leader.monitor_game(stub)
+    #leader.monitor_game(stub)
+
+    # create a thread pool with 2 threads
+    t1 = threading.Thread(target=leader.monitor_game, args=(stub,))
+    t1.start()
+
+    t2 = threading.Thread(target=leader.coordinator_console)
+    t2.start()
+
+    t1.join()
 
 
 def player_moves(stub, node_id):
