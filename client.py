@@ -22,7 +22,7 @@ def player_moves(stub, node_id):
     response = stub.AssignSymbol(tictactoe_pb2.AssignSymbolRequest(node_id=node_id))
     player = Player(node_id, response.symbol)
     while True:
-        symbol_position = [int(char) for char in list(input("Enter the position [x, y]: "))]
+        symbol_position = [int(char) for char in input("Enter the position x,y: ").split(',')]
         print(f"Coordinator answered: {player.set_symbol(stub, symbol_position)}")
         break
 
