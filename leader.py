@@ -83,6 +83,7 @@ class GameCoordinator:
 
     def set_symbol(self, node_id, position):
         # Node id when passed in args through GRPC has to be converted to a string
+            
         position = [int(c) for c in position.split(',')]
         for number in position:
             if number > 2:
@@ -101,7 +102,11 @@ class GameCoordinator:
 
         # switching the queue
         self.next_move_id.put(self.next_move_id.get())
-        return True, "Symbol is set successfully."
+        # Testing who won
+        if self.check_winner() == '-':
+            return True, "Symbol is set successfully."
+        else:
+            return False, f"Player {node_id} won!"
 
     def reset_game(self):
         """If the winner was found, restart"""
