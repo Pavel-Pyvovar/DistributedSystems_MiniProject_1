@@ -71,6 +71,7 @@ class GameCoordinator:
 
 
     def add_symbol(self, node_id, symbol, position):
+        self.board[position[0]][position[1]] = symbol
         print(f"symbol {symbol} is added from player {node_id}")
         pass
 
