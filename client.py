@@ -13,13 +13,18 @@ def coordinator_moves(stub, node_id):
     while not response.success:
         response = stub.FetchSymbols(tictactoe_pb2.FetchSymbolsRequest())
 
+    print(f"Game is started! You are a COORDINATOR. PLayers' symbols: {response.players}")
     leader = GameCoordinator(leader_id=node_id, player_ids_symbols=response.players)
-
     leader.monitor_game(stub)
 
 
 def player_moves(stub, node_id):
     response = stub.AssignSymbol(tictactoe_pb2.AssignSymbolRequest(node_id=node_id))
+    print(f"Game is started! You a PLAYER. Your symbol: {response.symbol}")
+    if response.symbol == 'X':
+        print("You move first!")
+    else:
+        print("You move after another player.")
     player = Player(node_id, response.symbol)
     while True:
         symbol_position = [int(char) for char in input("Enter the position x,y: ").split(',')]
@@ -29,12 +34,11 @@ def player_moves(stub, node_id):
 
 def run():
     with grpc.insecure_channel('localhost:20048') as channel:
-
         stub = tictactoe_pb2_grpc.TicTacToeStub(channel)
-
+        print("Joining the game...")
         response = stub.JoinGame(tictactoe_pb2.JoinGameRequest(timestamp=datetime.now().isoformat()))
-
         node_id = response.node_id
+        print(f"You are joined the game. Id: {node_id}")
 
         response = stub.StartGame(tictactoe_pb2.StartGameRequest(node_id=node_id, timestamp=datetime.now().isoformat()))
         while not response.success:
