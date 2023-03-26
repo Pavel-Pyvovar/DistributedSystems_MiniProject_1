@@ -16,6 +16,7 @@ class GameCoordinator:
         self.next_move_id = Queue()
         self.next_move_id.put(list(player_ids_symbols.keys())[list(player_ids_symbols.values()).index('X')])
         self.next_move_id.put(list(player_ids_symbols.keys())[list(player_ids_symbols.values()).index('O')])
+        self.commands = {"Set-symbol": self.set_symbol, "List-board": self.list_board}
 
     # return a symbol of a winner
     def check_winner(self) -> str:
@@ -66,36 +67,37 @@ class GameCoordinator:
 
     def monitor_game(self, stub):
         while True:
-            response = stub.SetSymbolCoordinator(tictactoe_pb2.SetSymbolCoordinatorRequest())
-            print(f"Request from node {response.node_id} accepted.")
-            # sends result info to server inside the function
-            response = self.add_symbol(response.node_id, response.symbol, response.position, stub)
+            response = stub.CoordinatorAcceptCommand(tictactoe_pb2.CoordinatorAcceptCommandRequest())
+            node_id, command, args = response.node_id, response.command, response.args
+            print(f"Arguments: {args}")
+            # TODO: Add logic to call different coordinator methods based on sent command
+            success, message = self.commands[command](node_id, *args)
+
+            response = stub.CoordinatorSendCommandResult(
+                tictactoe_pb2.CoordinatorSendCommandResultRequest(success=success, message=message))
+
             if response.success:
                 print("Player is successfuly notified about the result.")
             else:
                 print("Player is not notified about the result.")
 
+    def set_symbol(self, node_id, position):
+        # Node id when passed in args through GRPC has to be converted to a string
+        position = [int(c) for c in position.split(',')]
+        symbol = self.player_ids_symbols[node_id]
 
-
-    def add_symbol(self, node_id, symbol, position, stub):
         if self.next_move_id.queue[0] != node_id:
-            return stub.SetSymbolCoordinatorResult(
-                tictactoe_pb2.SetSymbolCoordinatorResultRequest(
-                    success=False, message="Is it not your turn."))
+            return False, "Is it not your turn."
 
         if self.board[position[0]][position[1]] != '-':
-            return stub.SetSymbolCoordinatorResult(
-                tictactoe_pb2.SetSymbolCoordinatorResultRequest(
-                    success=False, message="This position is already taken."))
+            return False, "This position is already taken."
 
         self.board[position[0]][position[1]] = symbol
         print(f"Symbol {symbol} is added from player {node_id}.")
 
         # switching the queue
         self.next_move_id.put(self.next_move_id.get())
-        return stub.SetSymbolCoordinatorResult(
-            tictactoe_pb2.SetSymbolCoordinatorResultRequest(
-                success=True, message="Symbol is set successfully."))
+        return True, "Symbol is set successfully."
 
     def reset_game(self):
         """If the winner was found, restart"""
@@ -115,7 +117,7 @@ class GameCoordinator:
         pass
 
     # returns board in a shape of matrix in a string format
-    def list_board(self) -> str:
+    def list_board(self, node_id, args) -> str:
         """Send a request to show the board."""
         output_board_string = ''
         for i in range(self.board_size):

@@ -5,10 +5,9 @@ service TicTacToe {
   rpc StartGame(StartGameRequest) returns (StartGameResponse) {}
   rpc AssignSymbol(AssignSymbolRequest) returns (AssignSymbolResponse) {}
   rpc FetchSymbols(FetchSymbolsRequest) returns (FetchSymbolsResponse) {}
-  rpc SetSymbolPlayer(SetSymbolPlayerRequest) returns (SetSymbolPlayerResponse) {}
-  rpc SetSymbolCoordinator(SetSymbolCoordinatorRequest) returns (SetSymbolCoordinatorResponse) {}
-  rpc SetSymbolCoordinatorResult(SetSymbolCoordinatorResultRequest) returns (SetSymbolCoordinatorResultResponse) {}
-  rpc CommandRequest(CommandRequestMessage) returns (CommandReplyResult) {}    // to communicate with client nodes through the server
+  rpc PlayerSendCommand(PlayerSendCommandRequest) returns (PlayerSendCommandResponse) {}
+  rpc CoordinatorAcceptCommand(CoordinatorAcceptCommandRequest) returns (CoordinatorAcceptCommandResponse) {}
+  rpc CoordinatorSendCommandResult(CoordinatorSendCommandResultRequest) returns (CoordinatorSendCommandResultResponse) {}
   rpc SetNodeTime(SetNodeTimeRequest) returns (SetNodeTimeResponse) {}
 }
 
@@ -53,34 +52,32 @@ message FetchSymbolsResponse {
   map<int32, string> players = 2;
 }
 
-// Player sends info to server about its next turn
-message SetSymbolPlayerRequest {
+message PlayerSendCommandRequest {
   int32 node_id = 1;
-  string symbol = 2;
-  repeated int32 position = 3;
+  string command = 2;
+  repeated string args = 3;
 }
 
-// server replies if the symbols are transmitted to clients successfully
-message SetSymbolPlayerResponse {
+message PlayerSendCommandResponse {
   bool success = 1;
   string message = 2;
 }
 
-message SetSymbolCoordinatorRequest {
+message CoordinatorAcceptCommandRequest {
 }
 
-message SetSymbolCoordinatorResponse {
+message CoordinatorAcceptCommandResponse {
   int32 node_id = 1;
-  string symbol = 2;
-  repeated int32 position = 3;
+  string command = 2;
+  repeated string args = 3;
 }
 
-message SetSymbolCoordinatorResultRequest {
+message CoordinatorSendCommandResultRequest {
   bool success = 1;
   string message = 2;
 }
 
-message SetSymbolCoordinatorResultResponse {
+message CoordinatorSendCommandResultResponse {
   bool success = 1;
 }
 
@@ -92,29 +89,3 @@ message SetNodeTimeRequest {
 message SetNodeTimeResponse {
   string result = 1;
 }
-
-// server sends info to the leader
-message CommandReplyResult {
-  map<int32, int32> timestamps = 1;
-  string command = 2;
-  string symbol = 3;    // which symbol to put...
-  repeated int32 position = 4;    // ...at which position
-}
-
-// leader requests server to provide it with a command from a client node
-message CommandRequestMessage {
-  map<int32, int32> timestamps = 1;
-  int32 node_id = 2;
-  // do we need to specify smth else here?
-}
-
-// you can elaborate on this method for client request to a server
-message CommandMessage {
-  map<int32, int32> timestamps = 1;
-  string command = 2;
-  string symbol = 3;    // which symbol to put...
-  repeated int32 position = 4;    // ...at which position
-  int32 node_id = 5;
-}
-
-// Broadcast a message to start the game

@@ -34,25 +34,20 @@ class TicTacToeStub(object):
                 request_serializer=tictactoe__pb2.FetchSymbolsRequest.SerializeToString,
                 response_deserializer=tictactoe__pb2.FetchSymbolsResponse.FromString,
                 )
-        self.SetSymbolPlayer = channel.unary_unary(
-                '/TicTacToe/SetSymbolPlayer',
-                request_serializer=tictactoe__pb2.SetSymbolPlayerRequest.SerializeToString,
-                response_deserializer=tictactoe__pb2.SetSymbolPlayerResponse.FromString,
+        self.PlayerSendCommand = channel.unary_unary(
+                '/TicTacToe/PlayerSendCommand',
+                request_serializer=tictactoe__pb2.PlayerSendCommandRequest.SerializeToString,
+                response_deserializer=tictactoe__pb2.PlayerSendCommandResponse.FromString,
                 )
-        self.SetSymbolCoordinator = channel.unary_unary(
-                '/TicTacToe/SetSymbolCoordinator',
-                request_serializer=tictactoe__pb2.SetSymbolCoordinatorRequest.SerializeToString,
-                response_deserializer=tictactoe__pb2.SetSymbolCoordinatorResponse.FromString,
+        self.CoordinatorAcceptCommand = channel.unary_unary(
+                '/TicTacToe/CoordinatorAcceptCommand',
+                request_serializer=tictactoe__pb2.CoordinatorAcceptCommandRequest.SerializeToString,
+                response_deserializer=tictactoe__pb2.CoordinatorAcceptCommandResponse.FromString,
                 )
-        self.SetSymbolCoordinatorResult = channel.unary_unary(
-                '/TicTacToe/SetSymbolCoordinatorResult',
-                request_serializer=tictactoe__pb2.SetSymbolCoordinatorResultRequest.SerializeToString,
-                response_deserializer=tictactoe__pb2.SetSymbolCoordinatorResultResponse.FromString,
-                )
-        self.CommandRequest = channel.unary_unary(
-                '/TicTacToe/CommandRequest',
-                request_serializer=tictactoe__pb2.CommandRequestMessage.SerializeToString,
-                response_deserializer=tictactoe__pb2.CommandReplyResult.FromString,
+        self.CoordinatorSendCommandResult = channel.unary_unary(
+                '/TicTacToe/CoordinatorSendCommandResult',
+                request_serializer=tictactoe__pb2.CoordinatorSendCommandResultRequest.SerializeToString,
+                response_deserializer=tictactoe__pb2.CoordinatorSendCommandResultResponse.FromString,
                 )
         self.SetNodeTime = channel.unary_unary(
                 '/TicTacToe/SetNodeTime',
@@ -88,25 +83,19 @@ class TicTacToeServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def SetSymbolPlayer(self, request, context):
+    def PlayerSendCommand(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def SetSymbolCoordinator(self, request, context):
+    def CoordinatorAcceptCommand(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def SetSymbolCoordinatorResult(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def CommandRequest(self, request, context):
+    def CoordinatorSendCommandResult(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -141,25 +130,20 @@ def add_TicTacToeServicer_to_server(servicer, server):
                     request_deserializer=tictactoe__pb2.FetchSymbolsRequest.FromString,
                     response_serializer=tictactoe__pb2.FetchSymbolsResponse.SerializeToString,
             ),
-            'SetSymbolPlayer': grpc.unary_unary_rpc_method_handler(
-                    servicer.SetSymbolPlayer,
-                    request_deserializer=tictactoe__pb2.SetSymbolPlayerRequest.FromString,
-                    response_serializer=tictactoe__pb2.SetSymbolPlayerResponse.SerializeToString,
+            'PlayerSendCommand': grpc.unary_unary_rpc_method_handler(
+                    servicer.PlayerSendCommand,
+                    request_deserializer=tictactoe__pb2.PlayerSendCommandRequest.FromString,
+                    response_serializer=tictactoe__pb2.PlayerSendCommandResponse.SerializeToString,
             ),
-            'SetSymbolCoordinator': grpc.unary_unary_rpc_method_handler(
-                    servicer.SetSymbolCoordinator,
-                    request_deserializer=tictactoe__pb2.SetSymbolCoordinatorRequest.FromString,
-                    response_serializer=tictactoe__pb2.SetSymbolCoordinatorResponse.SerializeToString,
+            'CoordinatorAcceptCommand': grpc.unary_unary_rpc_method_handler(
+                    servicer.CoordinatorAcceptCommand,
+                    request_deserializer=tictactoe__pb2.CoordinatorAcceptCommandRequest.FromString,
+                    response_serializer=tictactoe__pb2.CoordinatorAcceptCommandResponse.SerializeToString,
             ),
-            'SetSymbolCoordinatorResult': grpc.unary_unary_rpc_method_handler(
-                    servicer.SetSymbolCoordinatorResult,
-                    request_deserializer=tictactoe__pb2.SetSymbolCoordinatorResultRequest.FromString,
-                    response_serializer=tictactoe__pb2.SetSymbolCoordinatorResultResponse.SerializeToString,
-            ),
-            'CommandRequest': grpc.unary_unary_rpc_method_handler(
-                    servicer.CommandRequest,
-                    request_deserializer=tictactoe__pb2.CommandRequestMessage.FromString,
-                    response_serializer=tictactoe__pb2.CommandReplyResult.SerializeToString,
+            'CoordinatorSendCommandResult': grpc.unary_unary_rpc_method_handler(
+                    servicer.CoordinatorSendCommandResult,
+                    request_deserializer=tictactoe__pb2.CoordinatorSendCommandResultRequest.FromString,
+                    response_serializer=tictactoe__pb2.CoordinatorSendCommandResultResponse.SerializeToString,
             ),
             'SetNodeTime': grpc.unary_unary_rpc_method_handler(
                     servicer.SetNodeTime,
@@ -245,7 +229,7 @@ class TicTacToe(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def SetSymbolPlayer(request,
+    def PlayerSendCommand(request,
             target,
             options=(),
             channel_credentials=None,
@@ -255,14 +239,14 @@ class TicTacToe(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/TicTacToe/SetSymbolPlayer',
-            tictactoe__pb2.SetSymbolPlayerRequest.SerializeToString,
-            tictactoe__pb2.SetSymbolPlayerResponse.FromString,
+        return grpc.experimental.unary_unary(request, target, '/TicTacToe/PlayerSendCommand',
+            tictactoe__pb2.PlayerSendCommandRequest.SerializeToString,
+            tictactoe__pb2.PlayerSendCommandResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def SetSymbolCoordinator(request,
+    def CoordinatorAcceptCommand(request,
             target,
             options=(),
             channel_credentials=None,
@@ -272,14 +256,14 @@ class TicTacToe(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/TicTacToe/SetSymbolCoordinator',
-            tictactoe__pb2.SetSymbolCoordinatorRequest.SerializeToString,
-            tictactoe__pb2.SetSymbolCoordinatorResponse.FromString,
+        return grpc.experimental.unary_unary(request, target, '/TicTacToe/CoordinatorAcceptCommand',
+            tictactoe__pb2.CoordinatorAcceptCommandRequest.SerializeToString,
+            tictactoe__pb2.CoordinatorAcceptCommandResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def SetSymbolCoordinatorResult(request,
+    def CoordinatorSendCommandResult(request,
             target,
             options=(),
             channel_credentials=None,
@@ -289,26 +273,9 @@ class TicTacToe(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/TicTacToe/SetSymbolCoordinatorResult',
-            tictactoe__pb2.SetSymbolCoordinatorResultRequest.SerializeToString,
-            tictactoe__pb2.SetSymbolCoordinatorResultResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def CommandRequest(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/TicTacToe/CommandRequest',
-            tictactoe__pb2.CommandRequestMessage.SerializeToString,
-            tictactoe__pb2.CommandReplyResult.FromString,
+        return grpc.experimental.unary_unary(request, target, '/TicTacToe/CoordinatorSendCommandResult',
+            tictactoe__pb2.CoordinatorSendCommandResultRequest.SerializeToString,
+            tictactoe__pb2.CoordinatorSendCommandResultResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
