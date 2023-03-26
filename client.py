@@ -36,9 +36,19 @@ def player_moves(stub, node_id):
             args = ['']
         response = stub.PlayerSendCommand(tictactoe_pb2.PlayerSendCommandRequest(
             node_id=node_id, command=command, args=args))
-        print(response.message)
-        break
+        message = response.message
 
+        # Showing the table
+        if command == 'List-board':
+            print_board(message)
+        else:
+            print(message)
+
+def print_board(data):
+    rows = data.split('\n')[:3]  # Split rows by newline
+    for row in rows:
+        cells = row.split('\t')[:4] # Split cells by tab
+        print(f"\n{cells[0]}\t{cells[1]}\t{cells[2]}")
 
 def run():
     with grpc.insecure_channel('localhost:20048') as channel:

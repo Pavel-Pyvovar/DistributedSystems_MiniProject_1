@@ -96,6 +96,7 @@ class TicTacToeServicer(tictactoe_pb2_grpc.TicTacToeServicer):
 
     def CoordinatorSendCommandResult(self, request, context):
         print(f"Coordinator replied")
+        self.coordinator_reply = []
         self.coordinator_reply.append(request.success)
         self.coordinator_reply.append(request.message)
         self.coordinator_done = True

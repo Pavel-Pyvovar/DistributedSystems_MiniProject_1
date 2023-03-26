@@ -84,6 +84,10 @@ class GameCoordinator:
     def set_symbol(self, node_id, position):
         # Node id when passed in args through GRPC has to be converted to a string
         position = [int(c) for c in position.split(',')]
+        for number in position:
+            if number > 2:
+                return False, f"Invalid position {position}, enter again."
+
         symbol = self.player_ids_symbols[node_id]
 
         if self.next_move_id.queue[0] != node_id:
@@ -124,4 +128,4 @@ class GameCoordinator:
             for j in range(self.board_size):
                 output_board_string += self.board[i][j] + '\t'
             output_board_string += '\n'
-        return output_board_string
+        return True, output_board_string
