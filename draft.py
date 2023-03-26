@@ -9,7 +9,7 @@ class LeaderNode:
         self.board_size = board_size
         self.commands_dispatch = {
                                      "Set-symbol": self.set_symbol,
-                                     "List-board"L self.list_board,
+                                     "List-board": self.list_board,
                                  "Set-node-time": self.set_node_time
         }
         self.board = [['-'] * self.board_size for _ in range(self.board_size)]  # 'empty' positions are marked as '-'

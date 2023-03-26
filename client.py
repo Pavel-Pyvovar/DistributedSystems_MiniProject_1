@@ -28,7 +28,12 @@ def player_moves(stub, node_id):
     player = Player(node_id, response.symbol)
     while True:
         symbol_position = [int(char) for char in input("Enter the position x,y: ").split(',')]
-        print(f"Coordinator answered: {player.set_symbol(stub, symbol_position)}")
+        response = player.set_symbol(stub, symbol_position)
+        print(f"Coordinator answered: {response}")
+        while not response.success:
+            symbol_position = [int(char) for char in input("Enter the position x,y: ").split(',')]
+            response = player.set_symbol(stub, symbol_position)
+            print(f"Coordinator answered: {response}")
         break
 
 

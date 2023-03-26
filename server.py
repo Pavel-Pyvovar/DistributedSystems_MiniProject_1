@@ -84,7 +84,7 @@ class TicTacToeServicer(tictactoe_pb2_grpc.TicTacToeServicer):
             while not self.coordinator_done:
                 time.sleep(5)
 
-            print(f"Sending info from the coord to the player...")
+            print(f"Sending info {self.coordinator_reply} from the coord to the player {request.node_id}...")
             self.is_busy = False
             return tictactoe_pb2.SetSymbolPlayerResponse(success=self.coordinator_reply[0], message=self.coordinator_reply[1])
         else:
@@ -105,6 +105,7 @@ class TicTacToeServicer(tictactoe_pb2_grpc.TicTacToeServicer):
 
     def SetSymbolCoordinatorResult(self, request, context):
         print(f"Coordinator replied")
+        self.coordinator_reply = []
         self.coordinator_reply.append(request.success)
         self.coordinator_reply.append(request.message)
         self.coordinator_done = True
