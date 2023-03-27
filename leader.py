@@ -1,8 +1,7 @@
+import time
 from queue import Queue
-from multiprocessing import Process
 
 import tictactoe_pb2
-import threading
 
 
 class GameCoordinator:
@@ -19,6 +18,7 @@ class GameCoordinator:
         self.next_move_id.put(list(player_ids_symbols.keys())[list(player_ids_symbols.values()).index('X')])
         self.next_move_id.put(list(player_ids_symbols.keys())[list(player_ids_symbols.values()).index('O')])
         self.commands = {"Set-symbol": self.set_symbol, "List-board": self.list_board}
+        self.reset_time_counter = 0
 
     # return a symbol of a winner
     def check_winner(self) -> str:
@@ -70,27 +70,34 @@ class GameCoordinator:
     def monitor_game(self, stub):
         while True:
             response = stub.CoordinatorAcceptCommand(tictactoe_pb2.CoordinatorAcceptCommandRequest())
+            self.reset_time_counter = 0
+            print(f"Timer was reset to {self.reset_time_counter}")
             node_id, command, args = response.node_id, response.command, response.args
-            print(f"Arguments: {args}")
-            # TODO: Add logic to call different coordinator methods based on sent command
-            success, message = self.commands[command](node_id, *args)
+
+            method = self.commands.get(command)
+            if method:
+                success, message = method(node_id, *args)
+            else:
+                success = False
+                message = f"Command {command} does not exist!"
 
             response = stub.CoordinatorSendCommandResult(
                 tictactoe_pb2.CoordinatorSendCommandResultRequest(success=success, message=message))
 
             if response.success:
-                print("Player is successfuly notified about the result.")
+                print("Player is successfully notified about the result.")
             else:
                 print("Player is not notified about the result.")
 
     def coordinator_console(self):
         while True:
-            command = input("Input a command (if new text appears in the console, you still is able to run a command): \n")
-            output_info = self.commands[command](self.leader_id, None)[1]
-            if command == 'List-board':
-                output_info = print_board(output_info)
+            command = input("Input a command (if new text appears in the console, you still are able to run a command): \n")
+            method = self.commands.get(command)
 
-            print(output_info)
+            if method:
+                output = method(self.leader_id, None)
+                if command == "List-board":
+                    self.print_board(output[1])
 
     def set_symbol(self, node_id, position):
         # Node id when passed in args through GRPC has to be converted to a string
@@ -122,9 +129,9 @@ class GameCoordinator:
     def reset_game(self):
         """If the winner was found, restart"""
         # Send a request to the server to start the game
-        pass
+        print("Resetting the game!")
 
-    def manage_timeout(self):
+    def manage_timeout(self, timeout=15):
         """
         The leader is also responsible to track and inforce time-outs
         in the systems. By default, if each player is idle for more than
@@ -134,11 +141,18 @@ class GameCoordinator:
          players haven’t heard a response from the server for about three
          minutes, they can reset the game.
         """
-        pass
+        print("Timer starts!")
+        self.reset_time_counter = 0
+        while self.reset_time_counter < timeout:
+            self.reset_time_counter += 1
+            time.sleep(1)
+        if self.reset_time_counter == timeout:
+            self.reset_game()
+            self.reset_time_counter = 0
 
     # returns board in a shape of matrix in a string format
     def list_board(self, node_id, args) -> str:
-        """Send a request to show the board."""
+        """Show the board."""
         output_board_string = ''
         for i in range(self.board_size):
             for j in range(self.board_size):
@@ -146,9 +160,8 @@ class GameCoordinator:
             output_board_string += '\n'
         return True, output_board_string
 
-
-def print_board(data):
-    rows = data.split('\n')[:3]  # Split rows by newline
-    for row in rows:
-        cells = row.split('\t')[:4] # Split cells by tab
-        print(f"\n{cells[0]}\t{cells[1]}\t{cells[2]}")
+    def print_board(self, data):
+        rows = data.split('\n')[:3]  # Split rows by newline
+        for row in rows:
+            cells = row.split('\t')[:4] # Split cells by tab
+            print(f"\n{cells[0]}\t{cells[1]}\t{cells[2]}")
