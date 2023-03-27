@@ -19,6 +19,8 @@ class GameCoordinator:
         self.next_move_id.put(list(player_ids_symbols.keys())[list(player_ids_symbols.values()).index('X')])
         self.next_move_id.put(list(player_ids_symbols.keys())[list(player_ids_symbols.values()).index('O')])
         self.commands = {"Set-symbol": self.set_symbol, "List-board": self.list_board}
+        self.winner_id = 0
+        self.game_finished = False
 
     # return a symbol of a winner
     def check_winner(self) -> str:
@@ -115,14 +117,28 @@ class GameCoordinator:
         self.next_move_id.put(self.next_move_id.get())
         # Testing who won
         if self.check_winner() == '-':
+            # Setting winner_id to 0 because there are no winners
+            self.winner_id = 0
             return True, "Symbol is set successfully."
+        elif self.game_finished == True:
+            # Send information to the losing player
+            # and resets game
+            self.reset_game()
+            return False, f"Player {self.winner_id} won! Game reset!"  
         else:
-            return False, f"Player {node_id} won!"
+            # Sends the winner the winning message
+            self.game_finished = True
+            self.winner_id = node_id
+            return False, f"Player {self.winner_id} won!"
 
     def reset_game(self):
         """If the winner was found, restart"""
         # Send a request to the server to start the game
-        pass
+
+        self.game_finished = False
+        self.board = [['-'] * self.board_size for _ in range(self.board_size)]  # 'empty' positions are marked as '-'
+
+        return True, f"Game restarted!"
 
     def manage_timeout(self):
         """
@@ -145,7 +161,6 @@ class GameCoordinator:
                 output_board_string += self.board[i][j] + '\t'
             output_board_string += '\n'
         return True, output_board_string
-
 
 def print_board(data):
     rows = data.split('\n')[:3]  # Split rows by newline
