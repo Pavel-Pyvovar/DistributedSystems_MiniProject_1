@@ -15,7 +15,6 @@ def coordinator_moves(stub, node_id):
 
     print(f"Game is started! You are a COORDINATOR. PLayers' symbols: {response.players}")
     leader = GameCoordinator(leader_id=node_id, player_ids_symbols=response.players)
-    #leader.monitor_game(stub)
 
     # create a thread pool with 2 threads
     t1 = threading.Thread(target=leader.monitor_game, args=(stub,))
@@ -58,10 +57,13 @@ def player_moves(stub, node_id):
             print(message)
 
 def print_board(data):
-    rows = data.split('\n')[:3]  # Split rows by newline
-    for row in rows:
-        cells = row.split('\t')[:4] # Split cells by tab
-        print(f"\n{cells[0]}\t{cells[1]}\t{cells[2]}")
+    if '-' not in data:
+        print(data)
+    else:
+        rows = data.split('\n')[:3]  # Split rows by newline
+        for row in rows:
+            cells = row.split('\t')[:4] # Split cells by tab
+            print(f"\n{cells[0]}\t{cells[1]}\t{cells[2]}")
 
 def run():
     with grpc.insecure_channel('localhost:20048') as channel:

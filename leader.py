@@ -21,6 +21,7 @@ class GameCoordinator:
         self.winner_id = 0
         self.game_finished = False
         self.reset_time_counter = 0
+        self.timeout_happened = False
 
     # return a symbol of a winner
     def check_winner(self) -> str:
@@ -73,12 +74,18 @@ class GameCoordinator:
         while True:
             response = stub.CoordinatorAcceptCommand(tictactoe_pb2.CoordinatorAcceptCommandRequest())
             self.reset_time_counter = 0
+            
             print(f"Timer was reset to {self.reset_time_counter}")
             node_id, command, args = response.node_id, response.command, response.args
 
             method = self.commands.get(command)
             if method:
-                success, message = method(node_id, *args)
+                if not self.timeout_happened:
+                    success, message = method(node_id, *args)
+                else:
+                    self.timeout_happened = False
+                    success = False
+                    message = f"Timeout happened!"
             else:
                 success = False
                 message = f"Command {command} does not exist!"
@@ -122,16 +129,17 @@ class GameCoordinator:
 
         # switching the queue
         self.next_move_id.put(self.next_move_id.get())
-        # Testing who won
+
         if self.check_winner() == '-':
             # Setting winner_id to 0 because there are no winners
             self.winner_id = 0
             return True, "Symbol is set successfully."
-        elif self.game_finished == True:
+        elif self.game_finished:
             # Send information to the losing player
             # and resets game
+            winning_message = f"Player {self.winner_id} won! You lost, game reset!"
             self.reset_game()
-            return False, f"Player {self.winner_id} won! Game reset!"  
+            return False, winning_message 
         else:
             # Sends the winner the winning message
             self.game_finished = True
@@ -145,7 +153,9 @@ class GameCoordinator:
         self.game_finished = False
         self.board = [['-'] * self.board_size for _ in range(self.board_size)]  # 'empty' positions are marked as '-'
 
-        return True, f"Game restarted!"
+        print('Reseting the game')
+
+        return True, f"Game was reset!"
 
     def manage_timeout(self, timeout=15):
         """
@@ -160,11 +170,16 @@ class GameCoordinator:
         print("Timer starts!")
         self.reset_time_counter = 0
         while self.reset_time_counter < timeout:
-            self.reset_time_counter += 1
-            time.sleep(1)
-        if self.reset_time_counter == timeout:
-            self.reset_game()
-            self.reset_time_counter = 0
+            if not self.timeout_happened:
+                self.reset_time_counter += 1
+                time.sleep(1)
+                print(self.reset_time_counter)
+                if self.reset_time_counter == timeout:
+                    print("Timeout!")
+                    self.reset_game()
+                    self.reset_time_counter = 0
+                    self.timeout_happened = True
+        
 
     # returns board in a shape of matrix in a string format
     def list_board(self, node_id, args) -> str:
@@ -176,8 +191,8 @@ class GameCoordinator:
             output_board_string += '\n'
         return True, output_board_string
 
-def print_board(self, data):
-    rows = data.split('\n')[:3]  # Split rows by newline
-    for row in rows:
-        cells = row.split('\t')[:4] # Split cells by tab
-        print(f"\n{cells[0]}\t{cells[1]}\t{cells[2]}")
+    def print_board(self, data):
+        rows = data.split('\n')[:3]  # Split rows by newline
+        for row in rows:
+            cells = row.split('\t')[:4] # Split cells by tab
+            print(f"\n{cells[0]}\t{cells[1]}\t{cells[2]}")
