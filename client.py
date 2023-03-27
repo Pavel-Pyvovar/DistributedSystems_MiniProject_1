@@ -24,6 +24,9 @@ def coordinator_moves(stub, node_id):
     t2 = threading.Thread(target=leader.coordinator_console)
     t2.start()
 
+    t3 = threading.Thread(target=leader.manage_timeout)
+    t3.start()
+
     t1.join()
 
 
