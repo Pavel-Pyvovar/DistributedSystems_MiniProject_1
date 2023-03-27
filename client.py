@@ -66,7 +66,7 @@ def print_board(data):
             print(f"\n{cells[0]}\t{cells[1]}\t{cells[2]}")
 
 def run():
-    with grpc.insecure_channel('localhost:20048') as channel:
+    with grpc.insecure_channel('192.168.43.105:20048') as channel:
         stub = tictactoe_pb2_grpc.TicTacToeStub(channel)
         print("Joining the game...")
         response = stub.JoinGame(tictactoe_pb2.JoinGameRequest(timestamp=datetime.now().isoformat()))

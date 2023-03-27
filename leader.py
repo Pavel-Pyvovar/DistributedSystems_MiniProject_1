@@ -173,7 +173,6 @@ class GameCoordinator:
             if not self.timeout_happened:
                 self.reset_time_counter += 1
                 time.sleep(1)
-                print(self.reset_time_counter)
                 if self.reset_time_counter == timeout:
                     print("Timeout!")
                     self.reset_game()
